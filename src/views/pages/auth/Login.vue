@@ -59,7 +59,7 @@ const checked = ref(false);
                 <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
                     <div class="text-center mb-5">
                         <router-link to="/"><img src="/media/images/login/avatar.png" alt="Image" height="70" /></router-link>
-                        <div class="text-900 text-2xl font-medium mt-2">PORTAL DE CITAS MEDICAS</div>
+                        <div class="text-900 text-2xl font-medium mt-2">PORTAL DE TICKETS DE ATENCÍON</div>
                         <span class="text-600 font-medium">Ingrese sus credenciales para continuar</span>
                     </div>
 

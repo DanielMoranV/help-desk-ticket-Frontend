@@ -27,3 +27,5 @@ npm run build
 ```sh
 npm run lint
 ```
+
+-   Modificar la ip del host del backend

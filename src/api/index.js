@@ -96,8 +96,45 @@ export const getPriority = () => axios.get('/priority');
 export const createTicket = (payload) => axios.post('/tickets', payload);
 
 /**
+ * @url POST /tickets
+ * @since 1.0
+ */
+export const getTicket = (ticketId) => axios.get(`/tickets/${ticketId}`);
+
+/**
  * @url PUT tickets/:ticketId/photo
  * @since 1.0
  */
 export const createTicketPhoto = (ticketId) => axios.post(`/tickets/${ticketId}/photo`);
+
+/**
+ * @url PUT tickets/:ticketId/photo
+ * @since 1.0
+ */
+export const getUserTicket = (userId) => axios.get(`/tickets/user/${userId}`);
+
+/**
+ * @url PUT tickets/:ticketId/photo
+ * @since 1.0
+ */
+export const getTickets = () => axios.get(`/tickets/`);
+
+/**
+ * @url PUT /users/:dni
+ * @since 1.0
+ */
+export const updateTicket = (ticketId, payload) => axios.put(`/tickets/${ticketId}`, payload);
+/*
+
+/**
+ * @url PUT tickets/:ticketId/photo
+ * @since 1.0
+ */
+export const getPhoto = (filename) => axios.get(`/photos/${filename}`);
+
+/**
+ * @url DELETE /users/:id
+ * @since 1.0
+ */
+export const deleteTicket = (ticketId) => axios.delete(`/tickets/${ticketId}`);
 /** */

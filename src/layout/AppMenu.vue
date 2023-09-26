@@ -10,7 +10,7 @@ const defaultMenuModel = [
         label: 'Personal',
         items: [
             { label: 'Registarse', icon: 'pi pi-fw pi-user', to: '/signin', roles: ['Invitado'] },
-            { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/profile', roles: [11, 'Colaborador'] }
+            { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/profile', roles: [11, 4, 'Colaborador'] }
         ]
     },
     {
@@ -20,8 +20,8 @@ const defaultMenuModel = [
     {
         label: 'Help Desk Tickets',
         items: [
-            { label: 'Nuevo', icon: 'pi pi-fw pi-plus', to: '/newticket', roles: ['Colaborador'] },
-            { label: 'Seguimiento', icon: 'pi pi-fw pi-chart-line', to: '/tracingtickets', roles: ['Colaborador'] },
+            { label: 'Nuevo', icon: 'pi pi-fw pi-plus', to: '/newticket', roles: [4, 'Colaborador'] },
+            { label: 'Seguimiento', icon: 'pi pi-fw pi-chart-line', to: '/tracingtickets', roles: [4, 'Colaborador'] },
             { label: 'Tickets', icon: 'pi pi-fw pi-ticket', to: '/tickets', roles: [11, 4] }
         ]
     },

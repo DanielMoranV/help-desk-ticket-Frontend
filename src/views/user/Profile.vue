@@ -2,7 +2,6 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/auth';
 import { useToast } from 'primevue/usetoast';
-import { dformat } from '../../utils/day';
 
 const toast = useToast();
 const authStore = useAuthStore();
@@ -47,24 +46,22 @@ const updatePassword = async () => {
 };
 const updateDataUser = async () => {
     loading.value = true;
-    const response = await authStore.updateDataUser(dataUser);
-    if (response == 1) {
-        showMessage('success', 'Contraseña actualizada');
-        password.value = '';
-        password1.value = '';
-    }
+    const payload = {
+        email: dataUser.email,
+        phone: dataUser.phone
+    };
+    await authStore.updateDataUser(payload);
+    showMessage('success', 'Contraseña actualizada');
+    password.value = '';
+    password1.value = '';
+
     loading.value = false;
 };
 
 onMounted(async () => {
     await authStore.currentUser();
     const userData = authStore.user.user;
-    console.log('UserData', authStore.user.position.areaId);
     Object.assign(dataUser, userData);
-
-    // Formatear Fecha y hora
-    const birthDate = dformat(dataUser.birthDate, 'DD MMMM YYYY');
-    dataUser.birthDate = birthDate;
 });
 </script>
 <template>
