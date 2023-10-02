@@ -1,13 +1,31 @@
 import { defineStore } from 'pinia';
-import { getCategory, getPriority, createTicket, getTicket, getUserTicket, deleteTicket, getTickets, updateTicket } from '../api';
+import {
+    getCategory,
+    getPriority,
+    createTicket,
+    createTicketBilling,
+    getTicket,
+    getTicketBilling,
+    getUserTicket,
+    getUserTicketBilling,
+    deleteTicket,
+    deleteTicketBilling,
+    getTickets,
+    getTicketsBilling,
+    updateTicket,
+    updateTicketBilling,
+    getCategoryBilling
+} from '../api';
 import cache from '../utils/cache';
 
 export const useTicketStore = defineStore({
     id: 'ticket',
     state: () => ({
         dataTicket: cache.getItem('dataTicket'),
+        dataTicketBilling: cache.getItem('dataTicketBilling'),
         loadingDataTicket: false,
         category: [],
+        categoryBilling: [],
         priority: []
     }),
     actions: {
@@ -18,6 +36,20 @@ export const useTicketStore = defineStore({
                     const { data } = await getCategory();
                     this.category = data;
                     return this.category;
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    this.loadingDataTicket = false;
+                }
+            }
+        },
+        async getCategoryBilling() {
+            if (this.category.length === 0) {
+                this.loadingDataTicket = true;
+                try {
+                    const { data } = await getCategoryBilling();
+                    this.categoryBilling = data;
+                    return this.categoryBilling;
                 } catch (error) {
                     console.log(error);
                 } finally {
@@ -49,6 +81,15 @@ export const useTicketStore = defineStore({
                 console.log('addticket: ', error);
             }
         },
+        async addTicketBilling(payload) {
+            try {
+                const { data } = await createTicketBilling(payload);
+                cache.setItem('dataTicketBilling', data);
+                this.dataTicketBilling = data;
+            } catch (error) {
+                console.log('addticket: ', error);
+            }
+        },
         async getTicket(ticketId) {
             try {
                 const { data } = await getTicket(ticketId);
@@ -61,12 +102,37 @@ export const useTicketStore = defineStore({
                 this.loadingDataTicket = false;
             }
         },
+        async getTicketBilling(ticketId) {
+            try {
+                const { data } = await getTicketBilling(ticketId);
+                cache.setItem('dataTicketBilling', data[0]);
+                this.dataTicketBilling = data[0];
+                return this.dataTicketBilling;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.loadingDataTicket = false;
+            }
+        },
+
         async getUserTicket(userId) {
             try {
                 const { data } = await getUserTicket(userId);
                 cache.setItem('dataTicket', data);
                 this.dataTicket = data;
                 return this.dataTicket;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.loadingDataTicket = false;
+            }
+        },
+        async getUserTicketBilling(userId) {
+            try {
+                const { data } = await getUserTicketBilling(userId);
+                cache.setItem('dataTicketBilling', data);
+                this.dataTicketBilling = data;
+                return this.dataTicketBilling;
             } catch (error) {
                 console.log(error);
             } finally {
@@ -85,6 +151,18 @@ export const useTicketStore = defineStore({
                 this.loadingDataTicket = false;
             }
         },
+        async getTicketsBilling() {
+            try {
+                const { data } = await getTicketsBilling();
+                cache.setItem('dataTicketBilling', data);
+                this.dataTicketBilling = data;
+                return this.dataTicketBilling;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.loadingDataTicket = false;
+            }
+        },
         async updateTickets(ticketId, payload) {
             try {
                 const { data } = await updateTicket(ticketId, { status: payload, resolvedAt: new Date() });
@@ -97,10 +175,32 @@ export const useTicketStore = defineStore({
                 this.loadingDataTicket = false;
             }
         },
+        async updateTicketsBilling(ticketId, payload) {
+            try {
+                const { data } = await updateTicket(ticketId, { status: payload, resolvedAt: new Date() });
+                cache.setItem('dataTicketBilling', data);
+                this.dataTicketBilling = data;
+                return this.dataTicketBilling;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.loadingDataTicket = false;
+            }
+        },
         async deleteTicket(ticketId) {
             try {
                 await deleteTicket(ticketId);
                 this.dataTicket = this.dataTicket.filter((item) => item.ticketId !== ticketId);
+            } catch (error) {
+                console.log(error.message);
+            } finally {
+                console.log('Finalizado');
+            }
+        },
+        async deleteTicketBilling(ticketId) {
+            try {
+                await deleteTicketBilling(ticketId);
+                this.dataTicketBilling = this.dataTicketBilling.filter((item) => item.ticketId !== ticketId);
             } catch (error) {
                 console.log(error.message);
             } finally {

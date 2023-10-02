@@ -6,102 +6,43 @@ import { useRouter } from 'vue-router';
 import { useTicketStore } from '../../stores/dataTickets';
 import { dformat } from '../../utils/day';
 import { useAuthStore } from '../../stores/auth';
-import { io } from 'socket.io-client';
-
-const socket = io.connect('http://10.253.2.86:8080/', { forceNew: true });
-const images = ref();
-const responsiveOptions = ref([
-    {
-        breakpoint: '1500px',
-        numVisible: 5
-    },
-    {
-        breakpoint: '1024px',
-        numVisible: 3
-    },
-    {
-        breakpoint: '768px',
-        numVisible: 2
-    },
-    {
-        breakpoint: '560px',
-        numVisible: 1
-    }
-]);
-const displayPhoto = ref(false);
 
 const toast = useToast();
 const router = useRouter();
-const urlPhoto = 'http://10.253.2.86:8080/api/v1/photos/';
+
 const authStore = useAuthStore();
 const ticketStore = useTicketStore();
 const dataTickets = ref(null);
 const dataTicket = ref({});
 const deleteDataTicketDialog = ref(false);
+const deleteDataTicketsDialog = ref(false);
 const dt = ref(null);
 const filters = ref({});
-const statusDialog = ref(false);
 
 onBeforeMount(() => {
     initFilters();
 });
 onMounted(async () => {
-    socket.on('messages', function (data) {
-        console.log(data);
-    });
-    // Escucha el evento 'newTicket' para agregar nuevos tickets a dataTickets
-    socket.on('newTicket', (users) => {
-        dataTickets.value = users;
-        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Se añadio un nuevo ticket', life: 3000 });
-    });
-
-    // Escucha el evento 'updateTicket' para actualizar tickets en dataTickets
-    socket.on('updateTicket', (users) => {
-        dataTickets.value = users;
-    });
-    await ticketStore.getTickets().then((data) => {
+    await ticketStore.getUserTicket(authStore.user.userId).then((data) => {
         dataTickets.value = data.map((dataTicket) => {
             return dataTicket;
         });
     });
+    console.log(dataTickets.value);
 });
+
+const openNew = () => {
+    router.push('/newticketBilling');
+};
 
 const confirmDeleteUserTicket = (editDataTicket) => {
     dataTicket.value = editDataTicket;
     deleteDataTicketDialog.value = true;
 };
-const viewTicket = (imgTicket) => {
-    //dataTicket.value = DataTicket;
 
-    images.value = imgTicket.ticketPhoto;
-    if (images.value.length > 0) {
-        displayPhoto.value = true;
-    } else {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'No se registraron imagenes', life: 3000 });
-    }
-
-    console.log(images.value);
-};
-const hideDialog = () => {
-    statusDialog.value = false;
-};
-const statusTicket = (statusTicket) => {
-    dataTicket.value = { ...statusTicket };
-    statusDialog.value = true;
-};
-const saveTicket = async () => {
-    const ticketIndex = dataTickets.value.findIndex((item) => item.ticketId === dataTicket.value.ticketId);
-    if (ticketIndex !== -1) {
-        await ticketStore.updateTickets(dataTicket.value.ticketId, dataTicket.value.status);
-        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Estado Actualizado', life: 3000 });
-        dataTicket.value.resolvedAt = new Date();
-        dataTickets.value[ticketIndex] = dataTicket.value;
-        statusDialog.value = false;
-        dataTicket.value[ticketIndex] = dataTicket.value;
-    }
-};
 const deleteDataTicket = async () => {
     if (dataTicket.value.status == 'Pendiente') {
+        console.log('soy pendiente');
         dataTickets.value = dataTickets.value.filter((val) => val.ticketId !== dataTicket.value.ticketId);
         await ticketStore.deleteTicket(dataTicket.value.ticketId);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Ticket Eliminado', life: 3000 });
@@ -129,11 +70,11 @@ const initFilters = () => {
             <div class="card">
                 <Toast />
                 <Toolbar class="mb-4">
-                    <!-- <template v-slot:start>
+                    <template v-slot:start>
                         <div class="my-2">
                             <Button label="Nuevo Ticket" icon="pi pi-plus" class="p-button-success mr-2" @click="openNew" />
                         </div>
-                    </template> -->
+                    </template>
 
                     <template v-slot:end>
                         <Button label="Exportar" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)" />
@@ -205,8 +146,6 @@ const initFilters = () => {
                     </Column>
                     <Column headerStyle="min-width:10rem;">
                         <template #body="slotProps">
-                            <Button icon="pi pi-eye" class="p-button-rounded p-button-success mr-2" @click="viewTicket(slotProps.data)" />
-                            <Button icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" @click="statusTicket(slotProps.data)" />
                             <Button icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" @click="confirmDeleteUserTicket(slotProps.data)" />
                         </template>
                     </Column>
@@ -247,44 +186,14 @@ const initFilters = () => {
                     </template>
                 </Dialog>
 
-                <Galleria v-model:visible="displayPhoto" :value="images" :responsiveOptions="responsiveOptions" :numVisible="9" containerStyle="max-width: 50%" :circular="true" :fullScreen="true" :showItemNavigators="true" :showThumbnails="false">
-                    <template #item="slotProps">
-                        <img :src="urlPhoto + slotProps.item.filename" :alt="slotProps.item.alt" style="width: 100%; display: block" />
-                    </template>
-                    <template #thumbnail="slotProps">
-                        <img :src="urlPhoto + slotProps.item.filename" :alt="slotProps.item.alt" style="display: block" />
-                    </template>
-                </Galleria>
-                <Dialog v-model:visible="statusDialog" :style="{ width: '450px' }" header="Estado del Ticket" :modal="true" class="p-fluid">
-                    <!-- <img :src="'demo/images/dependent/' + dependent.image" :alt="dependent.image" v-if="dependent.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" /> -->
-                    <div class="field">
-                        <label for="name">Nombre</label>
-                        <InputText id="name" v-model.trim="dataTicket.user.name" autofocus :disabled="true" />
-                    </div>
-                    <div class="field">
-                        <label for="s">Asunto</label>
-                        <InputText id="subject" v-model.trim="dataTicket.subject" autofocus :disabled="true" />
-                    </div>
-                    <div class="field">
-                        <label class="mb-3">Estado Actual</label>
-                        <div class="formgrid grid">
-                            <div class="field-radiobutton col-4">
-                                <RadioButton id="Pendiente" name="option" value="Pendiente" v-model="dataTicket.status" />
-                                <label for="Pendiente">Pendiente</label>
-                            </div>
-                            <div class="field-radiobutton col-4">
-                                <RadioButton id="Espera" name="option" value="Espera" v-model="dataTicket.status" />
-                                <label for="Espera">Espera</label>
-                            </div>
-                            <div class="field-radiobutton col-4">
-                                <RadioButton id="Solucionado" name="option" value="Solucionado" v-model="dataTicket.status" />
-                                <label for="Solucionado">Solucionado</label>
-                            </div>
-                        </div>
+                <Dialog v-model:visible="deleteDataTicketsDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+                    <div class="flex align-items-center justify-content-center">
+                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+                        <span v-if="dataTicket">Are you sure you want to delete the selected Tickets?</span>
                     </div>
                     <template #footer>
-                        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
-                        <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="saveTicket" />
+                        <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteDataTicketsDialog = false" />
+                        <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteSelectedDataTickets" />
                     </template>
                 </Dialog>
             </div>

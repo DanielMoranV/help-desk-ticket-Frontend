@@ -37,8 +37,7 @@ export const useAuthStore = defineStore({
                 this.user = data;
                 this.sessionUser = true;
                 this.position = this.user.position.name;
-                this.area = this.user.position.areaId !== 11 && this.user.position.areaId !== 4 ? 'Colaborador' : this.user.position.areaId;
-                console.log(this.area);
+                this.area = this.user.position.areaId !== 11 && this.user.position.areaId !== 4 && this.user.position.areaId !== 2 && this.user.position.areaId !== 6 ? 'Colaborador' : this.user.position.areaId;
             } catch (error) {
                 this.msg = error.message;
                 this.user = null;
@@ -59,7 +58,7 @@ export const useAuthStore = defineStore({
                 this.user.user.phone = phone;
                 this.sessionUser = true;
                 this.position = this.user.position.name;
-                this.area = this.user.position.areaId !== 11 && this.user.position.areaId !== 4 ? 'Colaborador' : this.user.position.areaId;
+                this.area = this.user.position.areaId !== 1 && this.user.position.areaId !== 11 && this.user.position.areaId !== 4 && this.user.position.areaId !== 2 && this.user.position.areaId !== 6 ? 'Colaborador' : this.user.position.areaId;
             } catch (error) {
                 this.user = null;
                 this.sessionUser = false;

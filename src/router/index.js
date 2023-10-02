@@ -50,14 +50,33 @@ const router = createRouter({
                     component: () => import('@/views/user/TracingTickets.vue')
                 },
                 {
+                    path: '/tracingticketsBilling',
+                    name: 'tracingticketsBilling',
+                    component: () => import('@/views/admission/TracingTicketsBilling.vue')
+                },
+                {
                     path: '/tickets',
                     name: 'tickets',
                     component: () => import('@/views/Support/Tickets.vue')
                 },
                 {
-                    path: '/shifts',
-                    name: 'shifts',
-                    component: () => import('@/views/admission/Shifts.vue')
+                    path: '/newticketBilling',
+                    name: 'billing',
+                    component: () => import('@/views/admission/Billing.vue'),
+                    children: [
+                        {
+                            path: '/newticketBilling',
+                            component: () => import('@/views/admission/ticketsBilling/NewTicketBilling.vue')
+                        },
+                        {
+                            path: '/newticket/phototicketBilling',
+                            component: () => import('@/views/admission/ticketsBilling/PhotoTicketBilling.vue')
+                        },
+                        {
+                            path: '/newticket/confirmationBilling',
+                            component: () => import('@/views/admission/ticketsBilling/ConfirmationBilling.vue')
+                        }
+                    ]
                 }
             ]
         },
