@@ -15,7 +15,6 @@ const ticketStore = useTicketStore();
 const dataTickets = ref(null);
 const dataTicket = ref({});
 const deleteDataTicketDialog = ref(false);
-const deleteDataTicketsDialog = ref(false);
 const dt = ref(null);
 const filters = ref({});
 
@@ -23,12 +22,11 @@ onBeforeMount(() => {
     initFilters();
 });
 onMounted(async () => {
-    await ticketStore.getUserTicket(authStore.user.userId).then((data) => {
+    await ticketStore.getUserTicketBilling(authStore.user.userId).then((data) => {
         dataTickets.value = data.map((dataTicket) => {
             return dataTicket;
         });
     });
-    console.log(dataTickets.value);
 });
 
 const openNew = () => {
@@ -42,9 +40,8 @@ const confirmDeleteUserTicket = (editDataTicket) => {
 
 const deleteDataTicket = async () => {
     if (dataTicket.value.status == 'Pendiente') {
-        console.log('soy pendiente');
-        dataTickets.value = dataTickets.value.filter((val) => val.ticketId !== dataTicket.value.ticketId);
-        await ticketStore.deleteTicket(dataTicket.value.ticketId);
+        dataTickets.value = dataTickets.value.filter((val) => val.ticketBillingId !== dataTicket.value.ticketBillingId);
+        await ticketStore.deleteTicketBilling(dataTicket.value.ticketBillingId);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Ticket Eliminado', life: 3000 });
     } else {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Ticket Atendido no se puede eliminar', life: 3000 });
@@ -84,7 +81,7 @@ const initFilters = () => {
                 <DataTable
                     ref="dt"
                     :value="dataTickets"
-                    dataKey="ticketId"
+                    dataKey="ticketBillingId"
                     :paginator="true"
                     :rows="10"
                     :filters="filters"
@@ -95,7 +92,7 @@ const initFilters = () => {
                 >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                            <h5 class="m-0">Tickets Generados</h5>
+                            <h5 class="m-0">Tickets de Facturación Generados</h5>
                             <span class="block mt-2 md:mt-0 p-input-icon-left">
                                 <i class="pi pi-search" />
                                 <InputText v-model="filters['global'].value" placeholder="Buscar..." />
@@ -105,13 +102,25 @@ const initFilters = () => {
                     <Column field="ticketId" header="Nº" :sortable="true" headerStyle="width:10%; min-width:2rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Nº</span>
-                            {{ slotProps.data.ticketId }}
+                            {{ slotProps.data.ticketBillingId }}
                         </template>
                     </Column>
-                    <Column field="category.name" header="Categoría" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="admission" header="Admisión" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Admisión</span>
+                            {{ slotProps.data.admission }}
+                        </template>
+                    </Column>
+                    <Column field="categoryBilling.nameBilling" header="Categoría" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Categoría</span>
-                            {{ slotProps.data.category.name }}
+                            {{ slotProps.data.categoryBilling.nameBilling }}
+                        </template>
+                    </Column>
+                    <Column field="insuredStatus" header="Estado Póliza" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Estado Póliza</span>
+                            {{ slotProps.data.insuredStatus }}
                         </template>
                     </Column>
                     <Column field="priority.name" header="Prioridad" :sortable="true" headerStyle="width:14%; min-width:10rem;">
@@ -149,51 +158,18 @@ const initFilters = () => {
                             <Button icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" @click="confirmDeleteUserTicket(slotProps.data)" />
                         </template>
                     </Column>
-                    <!-- 
-                    <Column header="Image" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Image</span>
-                            <img :src="'demo/images/dataTicket/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
-                        </template>
-                    </Column>
-                    <Column field="price" header="Price" :sortable="true" headerStyle="width:14%; min-width:8rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Price</span>
-                            {{ formatCurrency(slotProps.data.price) }}
-                        </template>
-                    </Column>
-
-                    <Column field="rating" header="Reviews" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Rating</span>
-                            <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-                        </template>
-                    </Column>
-
-                     -->
                 </DataTable>
                 <Dialog v-model:visible="deleteDataTicketDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                         <span v-if="dataTicket"
-                            >Estás seguro de que quieres eliminar ticket Nº <b>{{ dataTicket.ticketId }}</b
+                            >Estás seguro de que quieres eliminar ticket Nº <b>{{ dataTicket.ticketBillingId }}</b
                             >?</span
                         >
                     </div>
                     <template #footer>
                         <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteDataTicketDialog = false" />
                         <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteDataTicket" />
-                    </template>
-                </Dialog>
-
-                <Dialog v-model:visible="deleteDataTicketsDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
-                    <div class="flex align-items-center justify-content-center">
-                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                        <span v-if="dataTicket">Are you sure you want to delete the selected Tickets?</span>
-                    </div>
-                    <template #footer>
-                        <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteDataTicketsDialog = false" />
-                        <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteSelectedDataTickets" />
                     </template>
                 </Dialog>
             </div>

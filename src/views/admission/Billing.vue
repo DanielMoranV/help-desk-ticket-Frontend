@@ -8,11 +8,11 @@ const nestedRouteItems = ref([
     },
     {
         label: 'Foto',
-        to: '/newticket/phototicketBilling'
+        to: '/newticketBilling/phototicketBilling'
     },
     {
         label: 'Confirmacíon',
-        to: '/newticket/confirmationBilling'
+        to: '/newticketBilling/confirmationBilling'
     }
 ]);
 </script>

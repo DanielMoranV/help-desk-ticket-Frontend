@@ -21,8 +21,6 @@ onMounted(async () => {
     // Formatear Fecha y hora
     const createdAt = dformat(ticketStore.dataTicket.createdAt, 'DD MMMM YYYY hh:mm a');
     ticketStore.dataTicket.createdAt = createdAt;
-
-    console.log(dataTicket.value);
 });
 </script>
 

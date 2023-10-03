@@ -53,9 +53,7 @@ const signinUser = async () => {
         username: dataUser.dni,
         password: dataUser.dni
     };
-    console.log(loginUser);
     await authStore.login(loginUser);
-    console.log(authStore.msg);
     if (authStore.sessionUser) {
         // Mostrar el toast
         toast.add({ severity: 'success', summary: 'Validación Correcta Bienvenido', life: 3000 });

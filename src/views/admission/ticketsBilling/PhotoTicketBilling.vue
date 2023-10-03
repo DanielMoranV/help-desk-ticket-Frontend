@@ -26,7 +26,7 @@ const showSuccessToast = () => {
 // Función de subida
 const onUpload = () => {
     showSuccessToast();
-    setTimeout(() => router.push('/newticket/confirmation'), 2000);
+    setTimeout(() => router.push('/newticketBilling/confirmationBilling'), 2000);
 };
 
 // Antes de la subida
@@ -41,15 +41,15 @@ const baseUrl = ref('');
 
 // Redireccionar a confirmacion
 const nextClick = () => {
-    router.push('/newticket/confirmation');
+    router.push('/newticketBilling/confirmationBilling');
 };
 
 onMounted(() => {
     // Obtener datos del ticket
-    ticketId.value = ticketStore.dataTicket.ticketId;
+    ticketId.value = ticketStore.dataTicketBilling.ticketBillingId;
 
     // Configurar URL y encabezados
-    baseUrl.value = `http://10.253.2.86:8080/api/v1/tickets/${ticketId.value}/photo`;
+    baseUrl.value = `http://10.253.2.86:8080/api/v1/ticketsBilling/${ticketId.value}/photo`;
 });
 </script>
 
@@ -57,7 +57,7 @@ onMounted(() => {
     <div class="field col-12 md:col-12">
         <h5>Fotos</h5>
         <Toast />
-        <FileUpload name="ticketPhotos" :url="baseUrl" @upload="onUpload" @before-send="beforeUpload" :multiple="true" accept="image/*" :maxFileSize="10 * 1024 * 1024" fileLimit:5 class="custom-file-upload" />
+        <FileUpload name="ticketBillingPhotos" :url="baseUrl" @upload="onUpload" @before-send="beforeUpload" :multiple="true" accept="image/*" :maxFileSize="10 * 1024 * 1024" fileLimit:5 class="custom-file-upload" />
     </div>
     <div class="field col-12 md:col-12">
         <Toast />

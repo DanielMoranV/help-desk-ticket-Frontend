@@ -10,21 +10,22 @@ const defaultMenuModel = [
         label: 'Personal',
         items: [
             { label: 'Registarse', icon: 'pi pi-fw pi-user', to: '/signin', roles: ['Invitado'] },
-            { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/profile', roles: [11, 4, 1, 'Colaborador'] }
+            { label: 'Perfil', icon: 'pi pi-fw pi-user', to: '/profile', roles: [11, 4, 1, 6, 'Colaborador'] }
         ]
     },
     {
-        label: 'Admisión',
+        label: 'Ticket Seguros',
         items: [
-            { label: 'Tickets Facturación', icon: 'pi pi-fw pi-money-bill', to: '/newticketBilling', roles: [4, 1, 2] },
-            { label: 'Seguimiento', icon: 'pi pi-fw pi-chart-bar', to: '/tracingticketsBilling', roles: [4, 1, 2] }
+            { label: 'Nueva Consulta Facturación', icon: 'pi pi-fw pi-money-bill', to: '/newticketBilling', roles: [4, 1, 2] },
+            { label: 'Seguimiento', icon: 'pi pi-fw pi-chart-bar', to: '/tracingticketsBilling', roles: [4, 1, 2] },
+            { label: 'Tickets', icon: 'pi pi-fw pi-ticket', to: '/ticketsBilling', roles: [11, 4, 6] }
         ]
     },
     {
         label: 'Help Desk Tickets',
         items: [
-            { label: 'Nuevo', icon: 'pi pi-fw pi-plus', to: '/newticket', roles: [4, 1, 'Colaborador'] },
-            { label: 'Seguimiento', icon: 'pi pi-fw pi-chart-line', to: '/tracingtickets', roles: [4, 1, 'Colaborador'] },
+            { label: 'Nuevo', icon: 'pi pi-fw pi-plus', to: '/newticket', roles: [4, 1, 6, 'Colaborador'] },
+            { label: 'Seguimiento', icon: 'pi pi-fw pi-chart-line', to: '/tracingtickets', roles: [4, 1, 6, 'Colaborador'] },
             { label: 'Tickets', icon: 'pi pi-fw pi-ticket', to: '/tickets', roles: [11, 4] }
         ]
     },
@@ -48,7 +49,6 @@ function updateMenuModel() {
 
 onMounted(async () => {
     await authStore.currentUser();
-    console.log(authStore.area);
     updateMenuModel();
 });
 

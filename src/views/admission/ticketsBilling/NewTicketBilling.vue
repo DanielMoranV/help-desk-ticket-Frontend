@@ -44,7 +44,6 @@ onMounted(async () => {
 const validateForm = () => {
     if (!dataTicket.priorityId || !dataTicket.subject || !dataTicket.categoryBillingId || !dataTicket.description) {
         showMessage('error', 'Por favor, complete todos los campos.');
-        console.log(dataTicket);
         return false;
     }
     return true;
@@ -58,9 +57,8 @@ const newticket = async () => {
     dataTicket.userId = authStore.user.user.userId;
     try {
         await ticketStore.addTicketBilling(dataTicket);
-        console.log(dataTicket);
         showMessage('success', 'Ticket Generado');
-        setTimeout(() => router.push('/newticket/phototicket'), 2000);
+        setTimeout(() => router.push('/newticketBilling/phototicketBilling'), 2000);
     } catch (error) {
         console.log(error);
     }

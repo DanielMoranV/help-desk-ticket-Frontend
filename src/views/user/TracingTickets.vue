@@ -28,7 +28,6 @@ onMounted(async () => {
             return dataTicket;
         });
     });
-    console.log(dataTickets.value);
 });
 
 const openNew = () => {
@@ -42,7 +41,6 @@ const confirmDeleteUserTicket = (editDataTicket) => {
 
 const deleteDataTicket = async () => {
     if (dataTicket.value.status == 'Pendiente') {
-        console.log('soy pendiente');
         dataTickets.value = dataTickets.value.filter((val) => val.ticketId !== dataTicket.value.ticketId);
         await ticketStore.deleteTicket(dataTicket.value.ticketId);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Ticket Eliminado', life: 3000 });

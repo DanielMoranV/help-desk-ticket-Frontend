@@ -13,16 +13,14 @@ const loading = ref(false);
 
 const dataTicket = ref([]);
 const nextClick = () => {
-    router.push('/tracingtickets');
+    router.push('/tracingticketsBilling');
 };
 
 onMounted(async () => {
-    dataTicket.value = await ticketStore.getTicket(ticketStore.dataTicket.ticketId);
+    dataTicket.value = await ticketStore.getTicketBilling(ticketStore.dataTicketBilling.ticketBillingId);
     // Formatear Fecha y hora
-    const createdAt = dformat(ticketStore.dataTicket.createdAt, 'DD MMMM YYYY hh:mm a');
-    ticketStore.dataTicket.createdAt = createdAt;
-
-    console.log(dataTicket.value);
+    const createdAt = dformat(ticketStore.dataTicketBilling.createdAt, 'DD MMMM YYYY hh:mm a');
+    ticketStore.dataTicketBilling.createdAt = createdAt;
 });
 </script>
 
@@ -34,10 +32,12 @@ onMounted(async () => {
                     <div class="flex align-items-center justify-content-center bg-cyan-200 mb-3" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                         <i class="fa-solid fa-notes-medical text-2xl text-cyan-700"></i>
                     </div>
-                    <h5 class="mb-2 text-900">Nº Ticket: {{ ticketStore.dataTicket.ticketId }}</h5>
-                    <p><b>Solicitante:</b> {{ dataTicket.user ? ticketStore.dataTicket.user.name : 'N/A' }}</p>
-                    <p><b>Prioridad:</b> {{ dataTicket.priority ? ticketStore.dataTicket.priority.name : 'N/A' }}</p>
-                    <p><b>Categoría:</b> {{ dataTicket.category ? ticketStore.dataTicket.category.name : 'N/A' }}</p>
+                    <h5 class="mb-2 text-900">Nº Ticket Facturación: {{ ticketStore.dataTicketBilling.ticketBillingId }}</h5>
+                    <p><b>Solicitante:</b> {{ dataTicket.user ? ticketStore.dataTicketBilling.user.name : 'N/A' }}</p>
+                    <p><b>Prioridad:</b> {{ dataTicket.priority ? ticketStore.dataTicketBilling.priority.name : 'N/A' }}</p>
+                    <p><b>Categoría:</b> {{ dataTicket.categoryBilling ? ticketStore.dataTicketBilling.categoryBilling.nameBilling : 'N/A' }}</p>
+                    <p><b>Estado Póliza:</b> {{ dataTicket.insuredStatus ? ticketStore.dataTicketBilling.insuredStatus : 'N/A' }}</p>
+                    <p><b>Admisión:</b> {{ dataTicket.admission ? ticketStore.dataTicketBilling.admission : 'N/A' }}</p>
                     <p><b>Asunto:</b> {{ dataTicket.subject }}</p>
                     <p><b>Descripción:</b> {{ dataTicket.description }}</p>
                     <p><b>Estado:</b> {{ dataTicket.status }}</p>

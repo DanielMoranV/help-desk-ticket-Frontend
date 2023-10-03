@@ -177,7 +177,7 @@ export const useTicketStore = defineStore({
         },
         async updateTicketsBilling(ticketId, payload) {
             try {
-                const { data } = await updateTicket(ticketId, { status: payload, resolvedAt: new Date() });
+                const { data } = await updateTicketBilling(ticketId, { status: payload, resolvedAt: new Date() });
                 cache.setItem('dataTicketBilling', data);
                 this.dataTicketBilling = data;
                 return this.dataTicketBilling;

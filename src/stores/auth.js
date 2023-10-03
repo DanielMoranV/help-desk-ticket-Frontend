@@ -33,7 +33,6 @@ export const useAuthStore = defineStore({
             try {
                 const { data } = await sigin(payload);
                 cache.setItem('user', data);
-                console.log(data);
                 this.user = data;
                 this.sessionUser = true;
                 this.position = this.user.position.name;
@@ -68,7 +67,6 @@ export const useAuthStore = defineStore({
         async updateAccessUser(payload) {
             try {
                 const username = this.user.username;
-                console.log('payload:', payload);
                 const { data } = await updateAccessUser(username, payload);
                 return data.count;
             } catch (error) {

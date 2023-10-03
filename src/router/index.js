@@ -60,6 +60,11 @@ const router = createRouter({
                     component: () => import('@/views/Support/Tickets.vue')
                 },
                 {
+                    path: '/ticketsBilling',
+                    name: 'ticketsBilling',
+                    component: () => import('@/views/Billing/TicketsBilling.vue')
+                },
+                {
                     path: '/newticketBilling',
                     name: 'billing',
                     component: () => import('@/views/admission/Billing.vue'),
@@ -69,11 +74,11 @@ const router = createRouter({
                             component: () => import('@/views/admission/ticketsBilling/NewTicketBilling.vue')
                         },
                         {
-                            path: '/newticket/phototicketBilling',
+                            path: '/newticketBilling/phototicketBilling',
                             component: () => import('@/views/admission/ticketsBilling/PhotoTicketBilling.vue')
                         },
                         {
-                            path: '/newticket/confirmationBilling',
+                            path: '/newticketBilling/confirmationBilling',
                             component: () => import('@/views/admission/ticketsBilling/ConfirmationBilling.vue')
                         }
                     ]

@@ -47,13 +47,13 @@ onBeforeMount(() => {
 });
 onMounted(async () => {
     // Escucha el evento 'newTicket' para agregar nuevos tickets a dataTickets
-    socket.on('newTicket', (users) => {
+    socket.on('newTicketBilling', (users) => {
         dataTickets.value = users;
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Se añadio un nuevo ticket', life: 3000 });
     });
 
     // Escucha el evento 'updateTicket' para actualizar tickets en dataTickets
-    socket.on('updateTicket', (users) => {
+    socket.on('updateTicketBilling', (users) => {
         dataTickets.value = users;
     });
     await ticketStore.getTickets().then((data) => {
@@ -223,7 +223,6 @@ const initFilters = () => {
                     </template>
                 </Galleria>
                 <Dialog v-model:visible="statusDialog" :style="{ width: '450px' }" header="Estado del Ticket" :modal="true" class="p-fluid">
-                    <!-- <img :src="'demo/images/dependent/' + dependent.image" :alt="dependent.image" v-if="dependent.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" /> -->
                     <div class="field">
                         <label for="name">Nombre</label>
                         <InputText id="name" v-model.trim="dataTicket.user.name" autofocus :disabled="true" />
