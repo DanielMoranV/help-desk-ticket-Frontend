@@ -32,7 +32,7 @@ const displayPhoto = ref(false);
 
 const toast = useToast();
 const router = useRouter();
-const urlPhoto = 'http://10.253.2.86:8080/api/v1/photos/';
+const urlPhoto = 'http://10.253.2.86:8080/api/v1/photosBilling/';
 const authStore = useAuthStore();
 const ticketStore = useTicketStore();
 const dataTickets = ref(null);
@@ -56,7 +56,7 @@ onMounted(async () => {
     socket.on('updateTicketBilling', (users) => {
         dataTickets.value = users;
     });
-    await ticketStore.getTickets().then((data) => {
+    await ticketStore.getTicketsBilling().then((data) => {
         dataTickets.value = data.map((dataTicket) => {
             return dataTicket;
         });
@@ -68,9 +68,8 @@ const confirmDeleteUserTicket = (editDataTicket) => {
     deleteDataTicketDialog.value = true;
 };
 const viewTicket = (imgTicket) => {
-    //dataTicket.value = DataTicket;
+    images.value = imgTicket.TicketPhotoBilling;
 
-    images.value = imgTicket.ticketPhoto;
     if (images.value.length > 0) {
         displayPhoto.value = true;
     } else {
@@ -85,9 +84,9 @@ const statusTicket = (statusTicket) => {
     statusDialog.value = true;
 };
 const saveTicket = async () => {
-    const ticketIndex = dataTickets.value.findIndex((item) => item.ticketId === dataTicket.value.ticketId);
+    const ticketIndex = dataTickets.value.findIndex((item) => item.ticketBillingId === dataTicket.value.ticketBillingId);
     if (ticketIndex !== -1) {
-        await ticketStore.updateTickets(dataTicket.value.ticketId, dataTicket.value.status);
+        await ticketStore.updateTicketsBilling(dataTicket.value.ticketBillingId, dataTicket.value.status);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Estado Actualizado', life: 3000 });
         dataTicket.value.resolvedAt = new Date();
         dataTickets.value[ticketIndex] = dataTicket.value;
@@ -97,8 +96,8 @@ const saveTicket = async () => {
 };
 const deleteDataTicket = async () => {
     if (dataTicket.value.status == 'Pendiente') {
-        dataTickets.value = dataTickets.value.filter((val) => val.ticketId !== dataTicket.value.ticketId);
-        await ticketStore.deleteTicket(dataTicket.value.ticketId);
+        dataTickets.value = dataTickets.value.filter((val) => val.ticketBillingId !== dataTicket.value.ticketBillingId);
+        await ticketStore.deleteTicketBilling(dataTicket.value.ticketBillingId);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Ticket Eliminado', life: 3000 });
     } else {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Ticket Atendido no se puede eliminar', life: 3000 });
@@ -132,7 +131,7 @@ const initFilters = () => {
                 <DataTable
                     ref="dt"
                     :value="dataTickets"
-                    dataKey="ticketId"
+                    dataKey="ticketBillingId"
                     :paginator="true"
                     :rows="10"
                     :filters="filters"
@@ -150,16 +149,16 @@ const initFilters = () => {
                             </span>
                         </div>
                     </template>
-                    <Column field="ticketId" header="Nº" :sortable="true" headerStyle="width:10%; min-width:2rem;">
+                    <Column field="ticketBillingId" header="Nº" :sortable="true" headerStyle="width:10%; min-width:2rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Nº</span>
-                            {{ slotProps.data.ticketId }}
+                            {{ slotProps.data.ticketBillingId }}
                         </template>
                     </Column>
-                    <Column field="category.name" header="Categoría" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="categoryBilling.nameBilling" header="Categoría" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Categoría</span>
-                            {{ slotProps.data.category.name }}
+                            {{ slotProps.data.categoryBilling.nameBilling }}
                         </template>
                     </Column>
                     <Column field="priority.name" header="Prioridad" :sortable="true" headerStyle="width:14%; min-width:10rem;">
@@ -204,7 +203,7 @@ const initFilters = () => {
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                         <span v-if="dataTicket"
-                            >Estás seguro de que quieres eliminar ticket Nº <b>{{ dataTicket.ticketId }}</b
+                            >Estás seguro de que quieres eliminar ticket Nº <b>{{ dataTicket.ticketBillingId }}</b
                             >?</span
                         >
                     </div>

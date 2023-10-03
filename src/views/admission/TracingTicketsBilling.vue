@@ -17,11 +17,20 @@ const dataTicket = ref({});
 const deleteDataTicketDialog = ref(false);
 const dt = ref(null);
 const filters = ref({});
+import { io } from 'socket.io-client';
+
+const socket = io.connect('http://10.253.2.86:8080/', { forceNew: true });
 
 onBeforeMount(() => {
     initFilters();
 });
 onMounted(async () => {
+    socket.on('newTicketBilling', (users) => {
+        dataTickets.value = users;
+    });
+    socket.on('updateTicketBilling', (users) => {
+        dataTickets.value = users;
+    });
     await ticketStore.getUserTicketBilling(authStore.user.userId).then((data) => {
         dataTickets.value = data.map((dataTicket) => {
             return dataTicket;

@@ -6,6 +6,9 @@ import { useRouter } from 'vue-router';
 import { useTicketStore } from '../../stores/dataTickets';
 import { dformat } from '../../utils/day';
 import { useAuthStore } from '../../stores/auth';
+import { io } from 'socket.io-client';
+
+const socket = io.connect('http://10.253.2.86:8080/', { forceNew: true });
 
 const toast = useToast();
 const router = useRouter();
@@ -23,6 +26,12 @@ onBeforeMount(() => {
     initFilters();
 });
 onMounted(async () => {
+    socket.on('newTicket', (users) => {
+        dataTickets.value = users;
+    });
+    socket.on('updateTicket', (users) => {
+        dataTickets.value = users;
+    });
     await ticketStore.getUserTicket(authStore.user.userId).then((data) => {
         dataTickets.value = data.map((dataTicket) => {
             return dataTicket;
