@@ -242,8 +242,8 @@ const initFilters = () => {
                                 <label for="Espera">Espera</label>
                             </div>
                             <div class="field-radiobutton col-4">
-                                <RadioButton id="Solucionado" name="option" value="Solucionado" v-model="dataTicket.status" />
-                                <label for="Solucionado">Solucionado</label>
+                                <RadioButton id="Aprobado" name="option" value="Aprobado" v-model="dataTicket.status" />
+                                <label for="Solucionado">Aprobado</label>
                             </div>
                         </div>
                     </div>

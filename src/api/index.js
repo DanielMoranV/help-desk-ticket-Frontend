@@ -94,6 +94,11 @@ export const getCategoryBilling = () => axios.get('/category/billing');
  * @since 1.0
  */
 export const getPriority = () => axios.get('/priority');
+/**
+ * @url POST /tickets
+ * @since 1.0
+ */
+export const countStatusTicket = () => axios.get(`/tickets/countStatus`);
 
 /**
  * @url POST /tickets
@@ -138,6 +143,8 @@ export const updateTicket = (ticketId, payload) => axios.put(`/tickets/${ticketI
  */
 export const deleteTicket = (ticketId) => axios.delete(`/tickets/${ticketId}`);
 /** */
+
+export const countStatusTicketBilling = () => axios.get(`/ticketsBilling/countStatus`);
 
 /**
  * @url POST /tickets

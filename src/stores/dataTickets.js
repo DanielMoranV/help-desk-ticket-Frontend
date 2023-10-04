@@ -14,7 +14,9 @@ import {
     getTicketsBilling,
     updateTicket,
     updateTicketBilling,
-    getCategoryBilling
+    getCategoryBilling,
+    countStatusTicket,
+    countStatusTicketBilling
 } from '../api';
 import cache from '../utils/cache';
 
@@ -24,6 +26,8 @@ export const useTicketStore = defineStore({
         dataTicket: cache.getItem('dataTicket'),
         dataTicketBilling: cache.getItem('dataTicketBilling'),
         loadingDataTicket: false,
+        statusBilling: cache.getItem('dataStatusBilling'),
+        statusTickets: cache.getItem('dataStatusTickets'),
         category: [],
         categoryBilling: [],
         priority: []
@@ -41,6 +45,32 @@ export const useTicketStore = defineStore({
                 } finally {
                     this.loadingDataTicket = false;
                 }
+            }
+        },
+        async countStatusTicketBilling() {
+            this.loadingDataTicket = true;
+            try {
+                const { data } = await countStatusTicketBilling();
+                cache.setItem('dataStatusBilling', data);
+                this.statusBilling = data;
+                return this.statusBilling;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.loadingDataTicket = false;
+            }
+        },
+        async countStatusTicket() {
+            this.loadingDataTicket = true;
+            try {
+                const { data } = await countStatusTicket();
+                cache.setItem('dataStatusTickets', data);
+                this.statusTickets = data;
+                return this.statusTickets;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.loadingDataTicket = false;
             }
         },
         async getCategoryBilling() {

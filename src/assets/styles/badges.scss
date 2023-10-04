@@ -10,7 +10,11 @@
 }
 
 .dataTicket-badge {
-    &.status-solucionado {
+    &.status-resuelto {
+        background: #C8E6C9;
+        color: #256029;
+    }
+    &.status-aprobado {
         background: #C8E6C9;
         color: #256029;
     }

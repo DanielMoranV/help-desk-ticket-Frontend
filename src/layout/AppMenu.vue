@@ -14,9 +14,13 @@ const defaultMenuModel = [
         ]
     },
     {
+        label: 'Administración',
+        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard', roles: [4, 11] }]
+    },
+    {
         label: 'Ticket Seguros',
         items: [
-            { label: 'Nueva Consulta Facturación', icon: 'pi pi-fw pi-money-bill', to: '/newticketBilling', roles: [4, 1, 2] },
+            { label: 'Nueva Solicitud', icon: 'pi pi-fw pi-money-bill', to: '/newticketBilling', roles: [4, 1, 2] },
             { label: 'Seguimiento', icon: 'pi pi-fw pi-chart-bar', to: '/tracingticketsBilling', roles: [4, 1, 2] },
             { label: 'Tickets', icon: 'pi pi-fw pi-ticket', to: '/ticketsBilling', roles: [11, 4, 6] }
         ]
@@ -28,10 +32,6 @@ const defaultMenuModel = [
             { label: 'Seguimiento', icon: 'pi pi-fw pi-chart-line', to: '/tracingtickets', roles: [4, 1, 6, 'Colaborador'] },
             { label: 'Tickets', icon: 'pi pi-fw pi-ticket', to: '/tickets', roles: [11, 4] }
         ]
-    },
-    {
-        label: 'Administración',
-        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard', roles: [4] }]
     }
 ];
 
