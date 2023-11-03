@@ -1,12 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useAuthStore } from '../../../stores/auth';
 import { useTicketStore } from '../../../stores/dataTickets';
 import { dformat } from '../../../utils/day';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const authStore = useAuthStore();
+
 const ticketStore = useTicketStore();
 
 const loading = ref(false);

@@ -1,5 +1,6 @@
 .customer-badge,
 .dataTicket-badge,
+.user-badge,
 .order-badge {
     border-radius: var(--border-radius);
     padding: .25em .5rem;
@@ -20,6 +21,27 @@
     }
 
     &.status-pendiente {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+
+    &.status-espera {
+        background: #FEEDAF;
+        color: #8A5340;
+    }
+}
+.user-badge {
+    &.status-resuelto {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.status-online {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.status-offline {
         background: #FFCDD2;
         color: #C63737;
     }

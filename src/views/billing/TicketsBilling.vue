@@ -2,10 +2,9 @@
 import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { useRouter } from 'vue-router';
 import { useTicketStore } from '../../stores/dataTickets';
-import { dformat } from '../../utils/day';
 import { useAuthStore } from '../../stores/auth';
+import { dformat } from '../../utils/day';
 import { io } from 'socket.io-client';
 
 const socket = io.connect('http://10.253.2.86:8080/', { forceNew: true });
@@ -31,10 +30,12 @@ const responsiveOptions = ref([
 const displayPhoto = ref(false);
 
 const toast = useToast();
-const router = useRouter();
+
 const urlPhoto = 'http://10.253.2.86:8080/api/v1/photosBilling/';
-const authStore = useAuthStore();
+
 const ticketStore = useTicketStore();
+const authStore = useAuthStore();
+
 const dataTickets = ref(null);
 const dataTicket = ref({});
 const deleteDataTicketDialog = ref(false);
@@ -46,6 +47,7 @@ onBeforeMount(() => {
     initFilters();
 });
 onMounted(async () => {
+    console.log(authStore.user);
     // Escucha el evento 'newTicket' para agregar nuevos tickets a dataTickets
     socket.on('newTicketBilling', (users) => {
         dataTickets.value = users;
@@ -86,7 +88,8 @@ const statusTicket = (statusTicket) => {
 const saveTicket = async () => {
     const ticketIndex = dataTickets.value.findIndex((item) => item.ticketBillingId === dataTicket.value.ticketBillingId);
     if (ticketIndex !== -1) {
-        await ticketStore.updateTicketsBilling(dataTicket.value.ticketBillingId, dataTicket.value.status);
+        console.log(authStore.user.user.userId);
+        await ticketStore.updateTicketsBilling(dataTicket.value.ticketBillingId, dataTicket.value.status, authStore.user.user.userId);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Estado Actualizado', life: 3000 });
         dataTicket.value.resolvedAt = new Date();
         dataTickets.value[ticketIndex] = dataTicket.value;
@@ -153,6 +156,12 @@ const initFilters = () => {
                         <template #body="slotProps">
                             <span class="p-column-title">Nº</span>
                             {{ slotProps.data.ticketBillingId }}
+                        </template>
+                    </Column>
+                    <Column field="admission" header="Admisión" :sortable="true" headerStyle="width:10%; min-width:2rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Nº</span>
+                            {{ slotProps.data.admission }}
                         </template>
                     </Column>
                     <Column field="categoryBilling.nameBilling" header="Categoría" :sortable="true" headerStyle="width:14%; min-width:10rem;">

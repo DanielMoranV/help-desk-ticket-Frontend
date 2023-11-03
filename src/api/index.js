@@ -8,12 +8,14 @@ import axios from './axios';
  */
 
 export const sigin = (payload) => axios.post('/access', payload);
+export const logout = (payload) => axios.patch('/access', payload);
 
 /**
  * @url POST /access:username
  * @since 1.0
  */
 export const createAccessUser = (username, payload) => axios.post(`/access/${username}`, payload);
+//export const addUser = (payload) => axios.post('/access/adduser', payload);
 
 /**
  * @url GET /access
@@ -40,6 +42,8 @@ export const updateAccessUser = (username, payload) => axios.put(`/access/${user
  */
 export const fetchUsers = () => axios.get('/users');
 
+export const getAcess = () => axios.get('/access');
+export const getPosition = () => axios.get('/role');
 /**
  * @url PUT /users/:dni
  * @since 1.0

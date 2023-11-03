@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import cache from '../utils/cache';
-import { sigin, currentUser, updateAccessUser, updateUser } from '../api';
+import { sigin, currentUser, updateAccessUser, updateUser, logout } from '../api';
 
 export const useAuthStore = defineStore({
     id: 'auth',
@@ -43,10 +43,11 @@ export const useAuthStore = defineStore({
                 this.sessionUser = false;
             }
         },
-        async logout() {
+        async logout(username) {
             this.user = null;
             this.sessionUser = false;
             this.position = 'Invitado';
+            await logout({ username });
             cache.cleanAll();
         },
         async currentUser() {

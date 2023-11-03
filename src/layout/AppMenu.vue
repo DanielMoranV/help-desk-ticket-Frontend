@@ -15,7 +15,10 @@ const defaultMenuModel = [
     },
     {
         label: 'Administración',
-        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard', roles: [4, 11] }]
+        items: [
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard', roles: [4, 11] },
+            { label: 'Usuarios', icon: 'pi pi-fw pi-users', to: '/users', roles: [4, 11] }
+        ]
     },
     {
         label: 'Ticket Seguros',

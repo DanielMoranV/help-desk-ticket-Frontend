@@ -56,7 +56,8 @@ const onTopBarMenuButton = () => {
 };
 const signOutClick = async () => {
     topbarMenuActive.value = false;
-    await logout();
+
+    await logout(authStore.user.username);
     router.push('/');
 };
 const topbarMenuClasses = computed(() => {

@@ -2,10 +2,8 @@
 import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { useRouter } from 'vue-router';
 import { useTicketStore } from '../../stores/dataTickets';
 import { dformat } from '../../utils/day';
-import { useAuthStore } from '../../stores/auth';
 import { io } from 'socket.io-client';
 
 const socket = io.connect('http://10.253.2.86:8080/', { forceNew: true });
@@ -31,9 +29,7 @@ const responsiveOptions = ref([
 const displayPhoto = ref(false);
 
 const toast = useToast();
-const router = useRouter();
 const urlPhoto = 'http://10.253.2.86:8080/api/v1/photos/';
-const authStore = useAuthStore();
 const ticketStore = useTicketStore();
 const dataTickets = ref(null);
 const dataTicket = ref({});

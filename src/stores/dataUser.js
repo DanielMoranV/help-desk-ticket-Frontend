@@ -1,40 +1,49 @@
 import { defineStore } from 'pinia';
-import { createUser, fetchUsers, getUser, updateUser, deleteUser, createPatients } from '../api';
+import cache from '../utils/cache';
+import { createUser, getUser, updateUser, deleteUser, getAcess, getPosition, createAccessUser } from '../api';
 
 export const useDataauthStore = defineStore('dataauthStore', {
     state: () => ({
-        dataUser: [],
-        loadingDataUser: false
+        dataUser: cache.getItem('users'),
+        loadingDataUser: false,
+        position: cache.getItem('position')
     }),
     actions: {
         async getUsers() {
-            if (this.dataUser.length === 0) {
-                this.loadingDataUser = true;
-                try {
-                    const { data } = await fetchUsers();
-                    this.dataUser = data;
-                } catch (error) {
-                    console.log(error);
-                } finally {
-                    this.loadingDataUser = false;
-                }
-            }
-        },
-
-        async addUsers(payload) {
+            this.loadingDataUser = true;
             try {
-                const { data } = await createUser(payload);
+                const { data } = await getAcess();
+                cache.setItem('users', data);
                 this.dataUser = data;
+                return data;
             } catch (error) {
                 console.log(error);
             } finally {
-                console.log('Finalizado');
+                this.loadingDataUser = false;
             }
         },
-        async addPatients(payload) {
+
+        // async addUsers(payload) {
+        //     try {
+        //         const { data } = await createUser(payload);
+
+        //         this.dataUser = data;
+        //     } catch (error) {
+        //         console.log(error);
+        //     } finally {
+        //         console.log('Finalizado');
+        //     }
+        // },
+        async createUser(payload) {
             try {
-                const { data } = await createPatients(payload);
+                const { user, ...access } = payload;
+                console.log(user, access);
+                const { data } = await createUser(user);
+                // if (data) {
+                //     await createAccessUser(user.dni, access);
+                // }
                 this.dataUser = data;
+                return data;
             } catch (error) {
                 console.log(error);
             } finally {
@@ -53,7 +62,22 @@ export const useDataauthStore = defineStore('dataauthStore', {
         },
         async updateUser(dni, payload) {
             try {
-                const { data } = await updateUser(dni, payload);
+                console.log(payload);
+                const { user, ...access } = payload;
+                const dataUser = {
+                    ...user,
+                    access: {
+                        update: {
+                            where: {
+                                username: access.username
+                            },
+                            data: {
+                                ...access
+                            }
+                        }
+                    }
+                };
+                const { data } = await updateUser(dni, dataUser);
                 this.dataUser = this.dataUser.map((item) => (item.dni === dni ? { ...item, ...data } : item));
             } catch (error) {
                 console.log(error.message);
@@ -67,6 +91,16 @@ export const useDataauthStore = defineStore('dataauthStore', {
                 console.log(error.message);
             } finally {
                 console.log('Finalizado');
+            }
+        },
+        async getPosition() {
+            try {
+                const { data } = await getPosition();
+                cache.setItem('users', data);
+                this.position = data;
+                return data;
+            } catch (error) {
+                console.log(error.message);
             }
         }
     }

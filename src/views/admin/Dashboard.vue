@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useTicketStore } from '../../stores/dataTickets';
 
 const ticketStore = useTicketStore();
