@@ -77,6 +77,7 @@ export const useDataauthStore = defineStore('dataauthStore', {
                         }
                     }
                 };
+                console.log(dataUser);
                 const { data } = await updateUser(dni, dataUser);
                 this.dataUser = this.dataUser.map((item) => (item.dni === dni ? { ...item, ...data } : item));
             } catch (error) {

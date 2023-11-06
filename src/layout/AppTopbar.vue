@@ -111,7 +111,7 @@ const isOutsideClicked = (event) => {
                 <i class="pi pi-user"></i>
                 <span>{{ dataUser.name }}</span>
             </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
+            <button class="p-link layout-topbar-button">
                 <i class="pi pi-cog"></i>
                 <span>{{ dataUser.position }}</span>
             </button>

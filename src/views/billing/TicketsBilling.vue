@@ -6,8 +6,8 @@ import { useTicketStore } from '../../stores/dataTickets';
 import { useAuthStore } from '../../stores/auth';
 import { dformat } from '../../utils/day';
 import { io } from 'socket.io-client';
-
-const socket = io.connect('http://10.253.2.86:8080/', { forceNew: true });
+const apiUrl = import.meta.env.API_URL;
+const socket = io.connect(apiUrl, { forceNew: true });
 const images = ref();
 const responsiveOptions = ref([
     {
@@ -30,8 +30,7 @@ const responsiveOptions = ref([
 const displayPhoto = ref(false);
 
 const toast = useToast();
-
-const urlPhoto = 'http://10.253.2.86:8080/api/v1/photosBilling/';
+const urlPhoto =`${apiUrl}/api/v1/photosBilling/`;
 
 const ticketStore = useTicketStore();
 const authStore = useAuthStore();
@@ -47,7 +46,6 @@ onBeforeMount(() => {
     initFilters();
 });
 onMounted(async () => {
-    console.log(authStore.user);
     // Escucha el evento 'newTicket' para agregar nuevos tickets a dataTickets
     socket.on('newTicketBilling', (users) => {
         dataTickets.value = users;
@@ -88,7 +86,6 @@ const statusTicket = (statusTicket) => {
 const saveTicket = async () => {
     const ticketIndex = dataTickets.value.findIndex((item) => item.ticketBillingId === dataTicket.value.ticketBillingId);
     if (ticketIndex !== -1) {
-        console.log(authStore.user.user.userId);
         await ticketStore.updateTicketsBilling(dataTicket.value.ticketBillingId, dataTicket.value.status, authStore.user.user.userId);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Estado Actualizado', life: 3000 });
         dataTicket.value.resolvedAt = new Date();

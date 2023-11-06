@@ -47,9 +47,9 @@ const nextClick = () => {
 onMounted(() => {
     // Obtener datos del ticket
     ticketId.value = ticketStore.dataTicket.ticketId;
-
+    const apiUrl = import.meta.env.API_URL;
     // Configurar URL y encabezados
-    baseUrl.value = `http://10.253.2.86:8080/api/v1/tickets/${ticketId.value}/photo`;
+    baseUrl.value = `${apiUrl}/api/v1/tickets/${ticketId.value}/photo`;
 });
 </script>
 

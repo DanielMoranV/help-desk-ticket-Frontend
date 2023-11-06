@@ -49,7 +49,8 @@ onMounted(() => {
     ticketId.value = ticketStore.dataTicketBilling.ticketBillingId;
 
     // Configurar URL y encabezados
-    baseUrl.value = `http://10.253.2.86:8080/api/v1/ticketsBilling/${ticketId.value}/photo`;
+    const apiUrl = import.meta.env.API_URL;
+    baseUrl.value = `${apiUrl}/api/v1/ticketsBilling/${ticketId.value}/photo`;
 });
 </script>
 

@@ -3,10 +3,11 @@ import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useTicketStore } from '../../stores/dataTickets';
+import { useAuthStore } from '../../stores/auth';
 import { dformat } from '../../utils/day';
 import { io } from 'socket.io-client';
-
-const socket = io.connect('http://10.253.2.86:8080/', { forceNew: true });
+const apiUrl = import.meta.env.API_URL;
+const socket = io.connect(apiUrl, { forceNew: true });
 const images = ref();
 const responsiveOptions = ref([
     {
@@ -29,8 +30,9 @@ const responsiveOptions = ref([
 const displayPhoto = ref(false);
 
 const toast = useToast();
-const urlPhoto = 'http://10.253.2.86:8080/api/v1/photos/';
+const urlPhoto = `${apiUrl}/api/v1/photos/`;
 const ticketStore = useTicketStore();
+const authStore = useAuthStore();
 const dataTickets = ref(null);
 const dataTicket = ref({});
 const deleteDataTicketDialog = ref(false);
@@ -83,7 +85,12 @@ const statusTicket = (statusTicket) => {
 const saveTicket = async () => {
     const ticketIndex = dataTickets.value.findIndex((item) => item.ticketId === dataTicket.value.ticketId);
     if (ticketIndex !== -1) {
-        await ticketStore.updateTickets(dataTicket.value.ticketId, dataTicket.value.status);
+        const payload = {
+            status: dataTicket.value.status,
+            agentId: authStore.user.accessId,
+            resolvedAt: new Date()
+        };
+        await ticketStore.updateTickets(dataTicket.value.ticketId, payload);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Estado Actualizado', life: 3000 });
         dataTicket.value.resolvedAt = new Date();
         dataTickets.value[ticketIndex] = dataTicket.value;
