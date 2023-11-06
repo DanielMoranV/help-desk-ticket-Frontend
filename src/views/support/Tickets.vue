@@ -6,8 +6,9 @@ import { useTicketStore } from '../../stores/dataTickets';
 import { useAuthStore } from '../../stores/auth';
 import { dformat } from '../../utils/day';
 import { io } from 'socket.io-client';
-const apiUrl = import.meta.env.API_URL;
-const socket = io.connect(apiUrl, { forceNew: true });
+import { backendURL } from '@/config.js';
+
+const socket = io.connect(backendURL, { forceNew: true });
 const images = ref();
 const responsiveOptions = ref([
     {
@@ -30,7 +31,7 @@ const responsiveOptions = ref([
 const displayPhoto = ref(false);
 
 const toast = useToast();
-const urlPhoto = `${apiUrl}/api/v1/photos/`;
+const urlPhoto = `${backendURL}/api/v1/photos/`;
 const ticketStore = useTicketStore();
 const authStore = useAuthStore();
 const dataTickets = ref(null);
@@ -180,7 +181,7 @@ const initFilters = () => {
                     <Column field="createdAt" header="F. Creación" :sortable="true" headerStyle="width:15%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Descripción</span>
-                            {{ dformat(slotProps.data.createdAt, 'DD MMMM YYYY') }}
+                            {{ dformat(slotProps.data.createdAt, 'DD MMMM YYYY hh:mm a') }}
                         </template>
                     </Column>
                     <Column field="status" header="Estado" :sortable="true" headerStyle="width:14%; min-width:10rem;">
@@ -192,7 +193,13 @@ const initFilters = () => {
                     <Column field="resolvedAt" header="F. Resolución" :sortable="true" headerStyle="width:15%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">F. Resolución</span>
-                            {{ slotProps.data.resolvedAt ? dformat(slotProps.data.resolvedAt, 'DD MMMM YYYY') : '- -' }}
+                            {{ slotProps.data.resolvedAt ? dformat(slotProps.data.resolvedAt, 'DD MMMM YYYY hh:mm a') : '- -' }}
+                        </template>
+                    </Column>
+                    <Column field="agent.user.name" header="Resuelto Por:" :sortable="true" headerStyle="width:15%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Resuelto Por:</span>
+                            {{ slotProps.data.agent ? slotProps.data.agent.user.name : '- -' }}
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">

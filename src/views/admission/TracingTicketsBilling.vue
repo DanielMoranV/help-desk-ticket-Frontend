@@ -7,6 +7,7 @@ import { useTicketStore } from '../../stores/dataTickets';
 import { dformat } from '../../utils/day';
 import { useAuthStore } from '../../stores/auth';
 import { io } from 'socket.io-client';
+import { backendURL } from '@/config.js';
 
 const toast = useToast();
 const router = useRouter();
@@ -19,9 +20,7 @@ const deleteDataTicketDialog = ref(false);
 const dt = ref(null);
 const filters = ref({});
 
-
-const apiUrl = import.meta.env.API_URL;
-const socket = io.connect(apiUrl, { forceNew: true });
+const socket = io.connect(backendURL, { forceNew: true });
 
 onBeforeMount(() => {
     initFilters();

@@ -7,8 +7,9 @@ import { useTicketStore } from '../../stores/dataTickets';
 import { dformat } from '../../utils/day';
 import { useAuthStore } from '../../stores/auth';
 import { io } from 'socket.io-client';
-const apiUrl = import.meta.env.API_URL;
-const socket = io.connect(apiUrl, { forceNew: true });
+import { backendURL } from '@/config.js';
+
+const socket = io.connect(backendURL, { forceNew: true });
 
 const toast = useToast();
 const router = useRouter();

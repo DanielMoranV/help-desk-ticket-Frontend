@@ -4,6 +4,7 @@ import { useToast } from 'primevue/usetoast';
 import { useAuthStore } from '../../../stores/auth';
 import { useTicketStore } from '../../../stores/dataTickets';
 import { useRouter } from 'vue-router';
+import { backendURL } from '@/config.js';
 
 const router = useRouter();
 const ticketStore = useTicketStore();
@@ -49,8 +50,8 @@ onMounted(() => {
     ticketId.value = ticketStore.dataTicketBilling.ticketBillingId;
 
     // Configurar URL y encabezados
-    const apiUrl = import.meta.env.API_URL;
-    baseUrl.value = `${apiUrl}/api/v1/ticketsBilling/${ticketId.value}/photo`;
+
+    baseUrl.value = `${backendURL}/api/v1/ticketsBilling/${ticketId.value}/photo`;
 });
 </script>
 
