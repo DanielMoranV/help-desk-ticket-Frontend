@@ -1,6 +1,12 @@
 /* eslint-disable prettier/prettier */
 import axios from './axios';
 
+// Tarifas
+
+export const getTariffGeneral = () => axios.get('/tariff/general');
+
+export const getTariffPersonalizado = () => axios.get('/tariff/personalizado');
+
 // Accesos
 /**
  * @url POST /access

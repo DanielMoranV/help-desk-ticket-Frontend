@@ -137,7 +137,7 @@ const initFilters = () => {
                     <Column field="createdAt" header="F. Creación" :sortable="true" headerStyle="width:15%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Descripción</span>
-                            {{ dformat(slotProps.data.createdAt, 'DD MMMM YYYY') }}
+                            {{ dformat(slotProps.data.createdAt, 'DD MMMM YYYY hh:mm a') }}
                         </template>
                     </Column>
                     <Column field="status" header="Estado" :sortable="true" headerStyle="width:14%; min-width:10rem;">
@@ -149,7 +149,7 @@ const initFilters = () => {
                     <Column field="resolvedAt" header="F. Resolución" :sortable="true" headerStyle="width:15%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">F. Resolución</span>
-                            {{ slotProps.data.resolvedAt ? dformat(slotProps.data.resolvedAt, 'DD MMMM YYYY') : '- -' }}
+                            {{ slotProps.data.resolvedAt ? dformat(slotProps.data.resolvedAt, 'DD MMMM YYYY hh:mm a') : '- -' }}
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
