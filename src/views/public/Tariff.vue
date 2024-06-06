@@ -41,7 +41,7 @@ const initFilters = () => {
 const initFiltersMedico = () => {
     filtersMedico.value = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        codigoSegus: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+        cod_seg: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
         nombre: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
         medico: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
         costo: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] }
@@ -92,7 +92,7 @@ const formatCurrency = (value) => {
             </div>
             <div id="pricing" class="py-4 px-4 lg:px-8 my-2 md:my-4">
                 <div class="text-center">
-                    <h2 class="text-900 font-normal mb-2">Tarifario se servicios Clinicos</h2>
+                    <h2 class="text-900 font-normal mb-2">Tarifario de servicios Clinicos</h2>
                 </div>
 
                 <div class="grid justify-content-between mt-8 md:mt-0">
@@ -160,7 +160,7 @@ const formatCurrency = (value) => {
                                     :loading="loadingMedico"
                                     :filters="filtersMedico"
                                     showGridlines
-                                    :globalFilterFields="['tarifario_general.cod_seg', 'medico.nom_ser', 'imp_seg', 'tarifario_general.nom_seg']"
+                                    :globalFilterFields="['tarifario_general.cod_seg', 'medico.nom_ser', 'medico.esp_ser', 'imp_seg', 'tarifario_general.nom_seg']"
                                 >
                                     <template #header>
                                         <div class="flex justify-content-between flex-column sm:flex-row">
@@ -184,11 +184,11 @@ const formatCurrency = (value) => {
                                             {{ slotProps.data.medico.nom_ser }}
                                         </template>
                                     </Column>
-                                    <!-- <Column field="general_tariff.grp_seg" header="Categoría" :sortable="true">
+                                    <Column field="medico.esp_ser" header="Especialidad" :sortable="true">
                                         <template #body="slotProps">
-                                            {{ slotProps.data.general_tariff.grp_seg }}
+                                            {{ slotProps.data.medico.esp_ser }}
                                         </template>
-                                    </Column> -->
+                                    </Column>
                                     <Column field="imp_seg" header="Costo" :sortable="true">
                                         <template #body="slotProps">
                                             {{ formatCurrency(Number(slotProps.data.imp_seg)) }}
