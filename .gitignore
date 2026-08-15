@@ -11,8 +11,14 @@ node_modules
 .DS_Store
 dist
 dist-ssr
+dist.zip
 coverage
 *.local
+
+# Environment variables (contain sensitive/environment-specific config)
+.env
+.env.*
+!.env.example
 
 /cypress/videos/
 /cypress/screenshots/
