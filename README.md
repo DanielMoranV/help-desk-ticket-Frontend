@@ -2,9 +2,13 @@
 
 Aplicación web para la gestión de tickets de soporte (mesa de ayuda) y tickets de facturación, con paneles diferenciados para usuarios, personal de soporte/admisión y administradores. Construida sobre el template administrativo **Sakai** de PrimeVue.
 
-## Estado del proyecto
+## Sobre este proyecto
 
-🚧 **En desarrollo activo.** El flujo funcional principal (autenticación, creación y seguimiento de tickets de soporte y de facturación, panel de administración de usuarios) está implementado. Existen tareas técnicas pendientes antes de considerarlo listo para producción — ver [Problemas conocidos](#problemas-conocidos-y-deuda-técnica).
+Lo construí en 2023 **por iniciativa propia**, a título personal, para mejorar los procesos de soporte de la clínica donde trabajo. **Nunca llegó a usarse allí**: fue uno de mis primeros proyectos completos y su objetivo real era demostrar —a otros y a mí mismo— que podía llevar una idea hasta una aplicación funcional de punta a punta. Después de este vino `csr_seguros`, ya como encargo formal.
+
+**Estado: archivado, fuera de servicio.** No hay despliegue activo. El flujo principal (autenticación, creación y seguimiento de tickets de soporte y de facturación, panel de administración de usuarios) está implementado; las tareas pendientes se documentan en [Problemas conocidos](#problemas-conocidos-y-deuda-técnica) y ya no se van a abordar.
+
+El backend que consumía esta SPA está en un repositorio privado.
 
 ## Tabla de contenidos
 
@@ -147,15 +151,15 @@ Copia `.env.example` a `.env` y ajusta los valores según tu entorno. **El archi
 Como parte del mantenimiento de este repositorio se realizó una auditoría de credenciales y configuración sensible. Resultado:
 
 - ✅ No se encontraron contraseñas, API keys ni tokens **hardcodeados** en el código fuente (`src/`). El login se resuelve dinámicamente contra el backend.
-- ⚠️ **Corregido**: el archivo `.env` estaba versionado en git desde commits históricos, exponiendo la URL del backend de producción. Se removió del control de versiones, se agregó a `.gitignore` y se creó `.env.example` como plantilla.
+- ⚠️ **Corregido**: el archivo `.env` estaba versionado en git desde commits históricos, exponiendo la URL del backend. Se removió del control de versiones, se agregó a `.gitignore` y se creó `.env.example` como plantilla.
 - ⚠️ **Corregido**: se eliminó `dist.zip` (build compilado de ~9 MB) que estaba versionado innecesariamente en el repositorio.
-- ℹ️ La URL de backend expuesta permanece en el **historial** de git de commits previos. Si se considera sensible, se recomienda rotar/renombrar el endpoint y evaluar una limpieza de historial (`git filter-repo` o BFG) de forma coordinada con el equipo, ya que reescribe commits compartidos.
+- ℹ️ **El historial no se purgó, y es una decisión consciente.** La URL sigue siendo recuperable de los commits antiguos, pero apunta a un servicio que ya no existe, así que no hay nada que rotar. Merece la pena dejar dicho el principio general: en un repositorio público, dejar de rastrear un archivo **no lo elimina del historial** — sigue descargable por URL de commit. Sirve para dejar de sangrar, nunca como contención. Ante un secreto real, la única respuesta válida es repositorio privado más rotación de la credencial.
 - ℹ️ El token de sesión se persiste en `localStorage` codificado en Base64 (`src/utils/cache.js`), lo cual **no es cifrado** (es reversible por cualquiera con acceso al navegador/DevTools) y es susceptible a robo vía XSS. Se recomienda evaluar cookies `httpOnly`/`secure` o al menos documentar el riesgo aceptado.
 - ℹ️ El guard de rutas (`router/index.js`) valida `meta.requiresAuth`/`meta.roles`, pero ninguna ruta define esos meta campos actualmente, por lo que la protección de rutas depende hoy del backend, no del frontend.
 
 ## Problemas conocidos y deuda técnica
 
-- Las importaciones dinámicas de algunas vistas en `router/index.js` no coinciden en mayúsculas/minúsculas con los archivos reales (`views/Support/Tickets.vue` vs. `views/support/Tickets.vue`, `views/Billing/...` vs. `views/billing/...`, `views/public/tariff.vue` vs. `views/public/Tariff.vue`). Esto puede romper el build en sistemas de archivos sensibles a mayúsculas (Linux/CI), aunque funcione en macOS/Windows.
+- ✅ **Corregido**: tres importaciones dinámicas de `router/index.js` no coincidían en mayúsculas con los archivos reales (`views/Support/`, `views/Billing/`, `views/public/tariff.vue`). Windows y macOS no distinguen mayúsculas y lo toleraban, pero el build reventaba en Linux y CI. Ya apuntan al nombre exacto.
 - El guard de autenticación del router no está aplicado a ninguna ruta (`meta.requiresAuth` sin usar).
 - `src/service/*` contiene datos de ejemplo heredados del template Sakai (`CountryService`, `ProductService`, `NodeService`), usados solo por vistas de demostración (`Blocks`, `Documentation`, `Icons`) que podrían eliminarse si no forman parte del producto final.
 - No hay tests automatizados configurados en el proyecto.

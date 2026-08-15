@@ -62,12 +62,12 @@ const router = createRouter({
                 {
                     path: '/tickets',
                     name: 'tickets',
-                    component: () => import('@/views/Support/Tickets.vue')
+                    component: () => import('@/views/support/Tickets.vue')
                 },
                 {
                     path: '/ticketsBilling',
                     name: 'ticketsBilling',
-                    component: () => import('@/views/Billing/TicketsBilling.vue')
+                    component: () => import('@/views/billing/TicketsBilling.vue')
                 },
                 {
                     path: '/newticketBilling',
@@ -98,7 +98,7 @@ const router = createRouter({
         {
             path: '/tariff',
             name: 'tariff',
-            component: () => import('@/views/public/tariff.vue')
+            component: () => import('@/views/public/Tariff.vue')
         },
         {
             path: '/pages/notfound',
